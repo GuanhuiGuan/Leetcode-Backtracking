@@ -1,0 +1,20 @@
+class Solution {
+    public List<List<Integer>> permute(int[] nums) {
+        List<List<Integer>> perm = new ArrayList<List<Integer>>();
+        pHelper(nums, new ArrayList<>(), perm);             //greedy: backtracking
+        return perm;
+    }
+    public void pHelper(int[] nums, List<Integer> subList, List<List<Integer>> perm){//backtracking
+        if(subList.size() == nums.length){                  //termination
+            perm.add(new ArrayList<>(subList));             //declare a new List
+        }
+        else{
+            for(int i = 0; i < nums.length; i++){
+                if(subList.contains(nums[i])){continue;}    //skip existing elements
+                subList.add(nums[i]);                       //add one element
+                pHelper(nums, subList, perm);               //iterate for the empty sublist
+                subList.remove(subList.size() - 1);         //remove that element
+            }
+        }
+    }
+}
