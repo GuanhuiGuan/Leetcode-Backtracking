@@ -1,0 +1,17 @@
+class Solution {
+    public List<List<Integer>> subsetsWithDup(int[] nums) {
+        Arrays.sort(nums);
+        List<List<Integer>> set = new ArrayList<>();
+        sHelper(set, new ArrayList<>(), 0, nums);
+        return set;
+    }
+    public void sHelper(List<List<Integer>> set, List<Integer> sub, int start, int[] nums){
+        set.add(new ArrayList<>(sub));
+        for(int k = start; k < nums.length; k++){
+            if(k > start && nums[k] == nums[k - 1])  continue;//sorted array
+            sub.add(nums[k]);
+            sHelper(set, sub, k + 1, nums);
+            sub.remove(sub.size() - 1);
+        }
+    }
+}
