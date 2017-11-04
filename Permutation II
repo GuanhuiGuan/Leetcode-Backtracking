@@ -1,0 +1,27 @@
+class Solution {
+    public List<List<Integer>> permuteUnique(int[] nums) {
+        List<List<Integer>> perm = new ArrayList<>();
+        Arrays.sort(nums);
+        int[] visited = new int[nums.length];
+        pHelper(perm, new ArrayList<>(), nums, visited);
+        return perm;
+    }
+    public void pHelper(List<List<Integer>> perm, List<Integer> sub, int[] nums, int[] visited){
+        if(sub.size() == nums.length){perm.add(new ArrayList<>(sub));}
+        else{
+            for(int k = 0; k < nums.length; k++){
+                if(visited[k] == 0 && (k == 0 || nums[k] != nums[k - 1] || nums[k] == nums[k - 1] && visited[k - 1] == 1)){
+                    //only search not visited elements which are not same as previous or same as previous but previous visited
+                    //expand in order, so for duplicate visited they're visited in the last layer
+                    //the last one is to make sure duplicates aren't re-visited during the same layer
+                    //make sure for one layer duplicate elements are only visited once
+                    sub.add(nums[k]);
+                    visited[k] = 1;//visited
+                    pHelper(perm, sub, nums, visited);
+                    sub.remove(sub.size() - 1);
+                    visited[k] = 0;//not visited
+                }   
+            }
+        }
+    }
+}
