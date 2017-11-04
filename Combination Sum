@@ -1,0 +1,21 @@
+class Solution {
+    public List<List<Integer>> combinationSum(int[] candidates, int target) {
+        Arrays.sort(candidates);
+        List<List<Integer>> set = new ArrayList<>();
+        csHelper(candidates, target, set, new ArrayList<>(), 0);
+        return set;
+    }
+    
+    public void csHelper(int[] candidates, int target, List<List<Integer>> set, List<Integer> sub, int start){
+        if(target == 0) set.add(new ArrayList<>(sub));
+        else if(target < 0) return;//all numbers positive thus no way to change from negative to positive
+        else{
+            for(int k = start; k < candidates.length; k++){ //pass along the start since we can't count backwards for one path
+                sub.add(candidates[k]);
+                csHelper(candidates, target - candidates[k], set, sub, k);//pass k because we can choose k multiple times
+                //But remember for combination we can't count backwards(less than k)(Permutation will count backwards)
+                sub.remove(sub.size() - 1);
+            }
+        }
+    }
+}
