@@ -1,0 +1,21 @@
+class Solution {
+    public List<List<Integer>> combinationSum2(int[] candidates, int target) {
+        Arrays.sort(candidates);
+        List<List<Integer>> set = new ArrayList<>();
+        cHelper(set, new ArrayList<>(), candidates, target, 0);
+        return set;
+    }
+    public void cHelper(List<List<Integer>> set, List<Integer> sub, int[] nums, int target, int start){
+        if(target == 0) set.add(new ArrayList<>(sub));
+        else if(target < 0) return;
+        else{
+            for(int i = start; i < nums.length; i++){
+                if(i == start || nums[i] != nums[i - 1]){
+                    sub.add(nums[i]);
+                    cHelper(set, sub, nums, target - nums[i], i + 1);
+                    sub.remove(sub.size() - 1);
+                } 
+            }
+        }
+    }
+}
