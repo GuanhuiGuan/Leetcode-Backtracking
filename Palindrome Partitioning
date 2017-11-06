@@ -1,0 +1,28 @@
+class Solution {
+    public List<List<String>> partition(String s) {
+        List<List<String>> set = new ArrayList<>();
+        parHelper(set, new ArrayList<>(), s, 0);
+        return set;
+    }
+    public void parHelper(List<List<String>> set, List<String> sub, String s, int start){
+        //sweep pointer start has swept through and reached the end of string s
+        if(start == s.length()){set.add(new ArrayList<>(sub));}
+        else{
+            for(int i = start; i < s.length(); i++){
+                if(isPalindrome(s, start, i)){
+                    sub.add(s.substring(start, i + 1));
+                    parHelper(set, sub, s, i + 1);//based on the previous palindrome partition, continue partition
+                    sub.remove(sub.size() - 1);//try palindromes of various lengths starting from start
+                }
+            }
+        }
+    }
+    public boolean isPalindrome(String s, int start, int i){
+        while(start < i){
+            if(s.charAt(start) != s.charAt(i))  return false;
+            start++;
+            i--;
+        }
+        return true;
+    }
+}
