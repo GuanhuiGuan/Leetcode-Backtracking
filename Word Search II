@@ -1,0 +1,45 @@
+//_______________Original Version____________________-
+class Solution {
+    private int m;
+    private int n;
+    private List<String> output;
+    private int[][] flag;
+    
+    public List<String> findWords(char[][] board, String[] words) {
+        m = board.length;
+        n = board[0].length;
+        output = new ArrayList<>();
+        
+        for(String word: words){
+            flag = new int[m][n];
+            boolean exist = false;
+            for(int i = 0; i < m; i++){
+                for(int j = 0; j < n; j++){
+                    if(word.charAt(0) == board[i][j] && bt(board, word, i, j, 0))   exist = true;
+                }
+            }
+            if(exist && !output.contains(word))   output.add(word);
+        }
+        
+        return output;
+    }
+    
+    public boolean bt(char[][] board, String word, int i, int j, int k){
+        // true if k reaches the end of word
+        if(k == word.length())    return true;
+        // false if out of bound OR not equal OR duplicates in one search
+        if(i < 0 || j < 0 || i >= m || j >= n
+          || board[i][j] != word.charAt(k)
+          || flag[i][j] == 1)   return false;
+        // bt exploration
+        flag[i][j] = 1;
+        if(bt(board, word, i-1, j, k+1)
+          || bt(board, word, i+1, j, k+1)
+          || bt(board, word, i, j-1, k+1)
+          || bt(board, word, i, j+1, k+1))  return true;
+        flag[i][j] = 0;
+        
+        return false;
+    }
+}
+
