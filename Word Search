@@ -1,0 +1,92 @@
+//________My Original dfs/bt Version__________
+class Solution {
+    private int m;
+    private int n;
+    
+    public boolean exist(char[][] board, String word) {
+        m = board.length;
+        n = board[0].length;
+        int[][] flag = new int[m][n];
+        
+        for(int i = 0; i < m; i++){
+            for(int j = 0; j < n; j++){
+                if(flag[i][j] == 0){
+                    if(dfs(board, word, flag, i, j, 0)) return true;
+                }
+            }
+        }
+        return false;
+    }
+    
+    public boolean dfs(char[][] board, String word, int[][] flag, int i, int j, int k){
+        
+        if(board[i][j] != word.charAt(k))   return false;
+        // next char
+        
+        k++;
+        if(k == word.length())  return true;
+        
+        flag[i][j] = 1;
+        int[] mov = {-1, 1};
+        for(int dx = 0; dx < mov.length; dx++){
+            if(i + mov[dx] >= 0 && i + mov[dx] < m){
+                if(flag[i + mov[dx]][j] == 0){
+                    if(dfs(board, word, flag, i + mov[dx], j, k))   return true;  
+                }
+            }
+        }
+        for(int dy = 0; dy < mov.length; dy++){
+            if(j + mov[dy] >= 0 && j + mov[dy] < n){
+                if(flag[i][j + mov[dy]] == 0){
+                    if(dfs(board, word, flag, i, j + mov[dy], k))   return true;
+                }
+            }
+        }
+        
+        //backtrack: not used more than once in one search, but can be used in other searches
+        flag[i][j] = 0;
+        return false;
+    }
+}
+
+
+//______________Revised Version_________________
+class Solution {
+    private int m;
+    private int n;
+    private int[][] flag;
+    
+    public boolean exist(char[][] board, String word) {
+        m = board.length;
+        n = board[0].length;
+        flag = new int[m][n];
+        
+        // use first letter of word to enumerate the board
+        for(int i = 0; i < m; i++){
+            for(int j = 0; j < n; j++){
+                if(board[i][j] == word.charAt(0) && bt(board, word, i, j, 0))   return true;
+            }
+        }
+        return false;
+    }
+    
+    // dfs/bt
+    public boolean bt(char[][] board, String word, int i, int j, int k){
+        // true if is the end of word
+        if(k == word.length())  return true;
+        // false if out of bound or duplicate uses in one word(flag) or not equal
+        if(i < 0 || j < 0 || i >= m || j >= n 
+           || flag[i][j] == 1 
+           || board[i][j] != word.charAt(k))   return false;
+        // bt steps, only need one of them true
+        flag[i][j] = 1;
+        if(bt(board, word, i-1, j, k+1)
+          || bt(board, word, i+1, j, k+1)
+          || bt(board, word, i, j-1, k+1)
+          || bt(board, word, i, j+1, k+1))  return true;
+        // reset flag(bt)
+        flag[i][j] = 0;
+        
+        return false;
+    }
+}
